@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Vegetta777</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(45deg, #4B0082, #9400D3);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 20px;
+            animation: fondoAnimado 10s infinite alternate;
+        }
+
+        @keyframes fondoAnimado {
+            0% { background: linear-gradient(45deg, #4B0082, #9400D3); }
+            100% { background: linear-gradient(45deg, #9400D3, #4B0082); }
+        }
+
+        .carrusel-container {
+            position: fixed;
+            top: 0;
+            width: 20%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .carrusel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            animation: cascada 8s linear infinite;
+        }
+
+        .carrusel img {
+            width: 100%;
+            border-radius: 10px;
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+        }
+
+        .carrusel img:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes cascada {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .izquierda {
+            left: 0;
+        }
+
+        .derecha {
+            right: 0;
+        }
+
+        .contenedor {
+            width: 60%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .feed {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .post {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .post img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: gold;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: orange;
+        }
+
+        @media (max-width: 768px) {
+            .carrusel-container {
+                display: none;
+            }
+
+            .contenedor {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="carrusel-container izquierda">
+        <div class="carrusel" id="carrusel-izq">
+            <img src="imagen1.jpg" alt="Vegetta777">
+            <img src="imagen2.jpg" alt="Vegetta777">
+            <img src="imagen3.jpg" alt="Vegetta777">
+        </div>
+    </div>
+
+    <div class="contenedor">
+        <h1 class="animacion">¡Feliz Cumpleaños Vegetta777!</h1>
+        <p>Deja tu mensaje y foto para celebrar su día.</p>
+        <form id="formulario">
+            <input type="text" id="nombre" placeholder="Tu nombre" required><br>
+            <textarea id="mensaje" placeholder="Escribe tu mensaje" required></textarea><br>
+            <input type="file" id="foto" accept="image/*" required><br>
+            <button type="submit">Publicar</button>
+        </form>
+    </div>
+
+    <div class="carrusel-container derecha">
+        <div class="carrusel" id="carrusel-der">
+            <img src="imagen1.jpg" alt="Vegetta777">
+            <img src="imagen2.jpg" alt="Vegetta777">
+            <img src="imagen3.jpg" alt="Vegetta777">
+        </div>
+    </div>
+
+    <div class="feed" id="feed"></div>
+
+    <script>
+        document.getElementById("formulario").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById("nombre").value;
+            const mensaje = document.getElementById("mensaje").value;
+            const foto = document.getElementById("foto").files[0];
+            
+            if (!foto) return alert("Por favor, selecciona una imagen.");
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const feed = document.getElementById("feed");
+                const post = document.createElement("div");
+                post.classList.add("post");
+                post.innerHTML = `<strong>${nombre}</strong><p>${mensaje}</p><img src="${event.target.result}" alt="Imagen subida">`;
+                feed.appendChild(post);
+
+                agregarAlCarrusel(event.target.result);
+            };
+            reader.readAsDataURL(foto);
+            
+            document.getElementById("formulario").reset();
+        });
+
+        function agregarAlCarrusel(imagenSrc) {
+            const carruselIzq = document.getElementById("carrusel-izq");
+            const carruselDer = document.getElementById("carrusel-der");
+
+            const nuevaImagenIzq = document.createElement("img");
+            nuevaImagenIzq.src = imagenSrc;
+            nuevaImagenIzq.alt = "Nueva imagen subida";
+            carruselIzq.appendChild(nuevaImagenIzq);
+
+            const nuevaImagenDer = document.createElement("img");
+            nuevaImagenDer.src = imagenSrc;
+            nuevaImagenDer.alt = "Nueva imagen subida";
+            carruselDer.appendChild(nuevaImagenDer);
+
+            aleatorizarCarrusel();
+        }
+
+        function aleatorizarCarrusel() {
+            const carruselIzq = document.getElementById("carrusel-izq");
+            const carruselDer = document.getElementById("carrusel-der");
+            const imagenesIzq = Array.from(carruselIzq.children);
+            const imagenesDer = Array.from(carruselDer.children);
+            
+            imagenesIzq.sort(() => Math.random() - 0.5);
+            imagenesDer.sort(() => Math.random() - 0.5);
+
+            carruselIzq.innerHTML = "";
+            carruselDer.innerHTML = "";
+
+            imagenesIzq.forEach(img => carruselIzq.appendChild(img));
+            imagenesDer.forEach(img => carruselDer.appendChild(img));
+        }
+    </script>
+</body>
+</html>
